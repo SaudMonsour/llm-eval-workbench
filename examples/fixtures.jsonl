@@ -1,0 +1,4 @@
+{"id":"capital","model":"fixture-a","response":"Paris","expected":"Paris","latency_ms":100,"cost_usd":0}
+{"id":"arithmetic","model":"fixture-a","response":"5","expected":"4","latency_ms":200,"cost_usd":0}
+{"id":"capital","model":"fixture-b","response":"PARIS","expected":"Paris","latency_ms":150,"cost_usd":0}
+{"id":"arithmetic","model":"fixture-b","response":"4","expected":"4","latency_ms":300,"cost_usd":0}

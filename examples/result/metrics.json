@@ -1,0 +1,73 @@
+{
+  "comparable_case_sets": true,
+  "models": [
+    {
+      "model": "fixture-a",
+      "cases": 2,
+      "exact_match_rate": 0.5,
+      "forbidden_hit_rate": 0,
+      "latency_p50_ms": 150.0,
+      "latency_p95_ms": 195.0,
+      "total_cost_usd": 0,
+      "case_ids": [
+        "arithmetic",
+        "capital"
+      ]
+    },
+    {
+      "model": "fixture-b",
+      "cases": 2,
+      "exact_match_rate": 1,
+      "forbidden_hit_rate": 0,
+      "latency_p50_ms": 225.0,
+      "latency_p95_ms": 292.5,
+      "total_cost_usd": 0,
+      "case_ids": [
+        "arithmetic",
+        "capital"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "capital",
+      "model": "fixture-a",
+      "response": "Paris",
+      "expected": "Paris",
+      "latency_ms": 100,
+      "cost_usd": 0,
+      "exact_match": true,
+      "forbidden_hits": []
+    },
+    {
+      "id": "arithmetic",
+      "model": "fixture-a",
+      "response": "5",
+      "expected": "4",
+      "latency_ms": 200,
+      "cost_usd": 0,
+      "exact_match": false,
+      "forbidden_hits": []
+    },
+    {
+      "id": "capital",
+      "model": "fixture-b",
+      "response": "PARIS",
+      "expected": "Paris",
+      "latency_ms": 150,
+      "cost_usd": 0,
+      "exact_match": true,
+      "forbidden_hits": []
+    },
+    {
+      "id": "arithmetic",
+      "model": "fixture-b",
+      "response": "4",
+      "expected": "4",
+      "latency_ms": 300,
+      "cost_usd": 0,
+      "exact_match": true,
+      "forbidden_hits": []
+    }
+  ]
+}
