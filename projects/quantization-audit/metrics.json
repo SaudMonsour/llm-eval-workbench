@@ -1,0 +1,50 @@
+{
+  "seed": 42,
+  "train": 1437,
+  "holdout": 360,
+  "data_source": "scikit-learn bundled UCI Optical Recognition of Handwritten Digits",
+  "model": "Multinomial logistic regression; not an LLM",
+  "quantization": "Weight only, dequantized float matrix multiplication; no GPU speed claim",
+  "results": [
+    {
+      "method": "FP32",
+      "accuracy": 0.9722222222222222,
+      "log_loss": 0.1019500762499841,
+      "parameter_bytes": 2600,
+      "logit_rmse": 0.0,
+      "prediction_flips": 0
+    },
+    {
+      "method": "INT8 tensor",
+      "accuracy": 0.9722222222222222,
+      "log_loss": 0.10230620438391283,
+      "parameter_bytes": 684,
+      "logit_rmse": 0.035779168503771115,
+      "prediction_flips": 0
+    },
+    {
+      "method": "INT8 channel",
+      "accuracy": 0.975,
+      "log_loss": 0.10354555534387432,
+      "parameter_bytes": 720,
+      "logit_rmse": 0.027611054736425517,
+      "prediction_flips": 1
+    },
+    {
+      "method": "INT4 tensor",
+      "accuracy": 0.9694444444444444,
+      "log_loss": 0.0919252144855925,
+      "parameter_bytes": 364,
+      "logit_rmse": 0.5119298418490674,
+      "prediction_flips": 6
+    },
+    {
+      "method": "INT4 channel",
+      "accuracy": 0.9555555555555556,
+      "log_loss": 0.11949767042891493,
+      "parameter_bytes": 400,
+      "logit_rmse": 0.37975071467449345,
+      "prediction_flips": 6
+    }
+  ]
+}

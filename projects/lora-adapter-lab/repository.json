@@ -1,0 +1,14 @@
+{
+  "name": "lora-adapter-lab",
+  "description": "Train and merge low-rank adapters from scratch with explicit gradients, frozen weights, and held-out evaluation.",
+  "topics": [
+    "lora",
+    "fine-tuning",
+    "parameter-efficient-fine-tuning",
+    "numpy",
+    "ai-engineering",
+    "nca-genl"
+  ],
+  "intended_visibility": "public",
+  "release_date": "2026-10-13"
+}

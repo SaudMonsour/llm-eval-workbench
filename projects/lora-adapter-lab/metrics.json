@@ -1,0 +1,43 @@
+{
+  "seed": 42,
+  "fixture": "Synthetic noisy linear transfer task, true update rank 4; not an LLM benchmark",
+  "train": 600,
+  "validation": 150,
+  "holdout": 150,
+  "optimizer": "Adam, lr .01, 800 steps; minimum validation checkpoint",
+  "results": [
+    {
+      "method": "Frozen base",
+      "parameters": 0,
+      "holdout_mse": 0.22036817570012626
+    },
+    {
+      "method": "LoRA rank 1",
+      "parameters": 56,
+      "selected_step": 118,
+      "validation_mse": 0.105219545169651,
+      "holdout_mse": 0.10249578871964232
+    },
+    {
+      "method": "LoRA rank 4",
+      "parameters": 224,
+      "selected_step": 160,
+      "validation_mse": 0.0004025387279074631,
+      "holdout_mse": 0.0004002087333958536
+    },
+    {
+      "method": "LoRA rank 8",
+      "parameters": 448,
+      "selected_step": 248,
+      "validation_mse": 0.0004067239790346608,
+      "holdout_mse": 0.00040292711952045134
+    },
+    {
+      "method": "Full update",
+      "parameters": 768,
+      "selected_step": 655,
+      "validation_mse": 0.000420740237227169,
+      "holdout_mse": 0.00041695596685493053
+    }
+  ]
+}

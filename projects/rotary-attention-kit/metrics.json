@@ -1,0 +1,11 @@
+{
+  "seed": 42,
+  "fixture": "Synthetic Gaussian Q/K/V; no trained language model",
+  "heads": 4,
+  "tokens": 64,
+  "head_dim": 32,
+  "incremental_max_abs_error": 8.881784197001252e-16,
+  "joint_shift_max_abs_error": 4.107825191113079e-15,
+  "rotation_norm_max_abs_error": 8.881784197001252e-16,
+  "future_attention_max": 0.0
+}

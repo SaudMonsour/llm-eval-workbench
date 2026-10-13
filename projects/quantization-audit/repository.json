@@ -1,0 +1,15 @@
+{
+  "name": "quantization-audit",
+  "description": "Compare packed INT4 and INT8 weight storage, output drift, and holdout accuracy with a reusable NumPy quantizer.",
+  "topics": [
+    "quantization",
+    "int4",
+    "int8",
+    "model-compression",
+    "numpy",
+    "ai-engineering",
+    "nca-genl"
+  ],
+  "intended_visibility": "public",
+  "release_date": "2026-10-13"
+}

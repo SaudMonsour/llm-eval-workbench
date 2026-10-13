@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-13",
+  "python": "3.12.14",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "numpy": "2.3.5",
+  "matplotlib": "3.10.8",
+  "sklearn": "1.8.0",
+  "execution": "Executed locally on CPU",
+  "seed": 42,
+  "tests_passed": 6,
+  "attribution": "AI-assisted implementation for Saud Alotaibi; no claim of independent human review",
+  "sha256": {
+    "audit.json": "c48345b0f7f7b567d0baa19793d8a1161ddf61b59afb773aff2d7df43a67b8ca",
+    "study.py": "929c0e4f16b47483a9b73072b3cb741e7b0ddadda931c94ddcf4c4f50fc6d580",
+    "test_quantize.py": "4cf808fee42b41bdb890d107a6d16daf771ac4957c81ba886897e20c277c32be",
+    "quantize.py": "a393c64d8a6b3a251506b930dec983ffafd8bcfe1fe8f05870c29134a44e4ef7",
+    "repository.json": "fd212ea82440726063dc1e78a7120070ae9694dee0d57b520aa239410400d438",
+    "weights.npz": "ca3cd40b694e49b311036cd95cb77ed1831a8a1ecfaa52d9bfb59d39d2cb681e",
+    "metrics.json": "45ef3594237aec7ee56a6392859708c68f0a8cd62182c598d3d623ae82fef11a"
+  }
+}

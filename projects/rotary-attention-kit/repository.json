@@ -1,0 +1,15 @@
+{
+  "name": "rotary-attention-kit",
+  "description": "NumPy rotary positional embeddings and causal attention with incremental-decoding equivalence checks.",
+  "topics": [
+    "llm",
+    "transformers",
+    "rope",
+    "attention",
+    "numpy",
+    "ai-engineering",
+    "nca-genl"
+  ],
+  "intended_visibility": "public",
+  "release_date": "2026-10-13"
+}
