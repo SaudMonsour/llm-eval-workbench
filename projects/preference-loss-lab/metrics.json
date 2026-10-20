@@ -1,0 +1,43 @@
+{
+  "seedPolicy": "Fixed train=41, validation=42, holdout=43; no seed search",
+  "fixture": "Synthetic six-feature contexts, three candidate actions; deterministic linear preference oracle; not language-model responses",
+  "train": 600,
+  "validation": 200,
+  "holdout": 200,
+  "optimizer": "Full-batch SGD, lr=0.2, 400 steps; minimum per-method validation objective checkpoint",
+  "results": [
+    {
+      "method": "Frozen reference",
+      "pairAccuracy": 0.455,
+      "meanKL": 0
+    },
+    {
+      "method": "SFT",
+      "selectedStep": 222,
+      "validationObjective": 0.859365977019038,
+      "pairAccuracy": 0.955,
+      "meanKL": 0.22420429049083435
+    },
+    {
+      "method": "DPO beta 0.1",
+      "selectedStep": 400,
+      "validationObjective": 0.6539355307245522,
+      "pairAccuracy": 0.935,
+      "meanKL": 0.1389304053105841
+    },
+    {
+      "method": "DPO beta 0.5",
+      "selectedStep": 400,
+      "validationObjective": 0.3283544246414197,
+      "pairAccuracy": 0.955,
+      "meanKL": 0.515089660883309
+    },
+    {
+      "method": "DPO beta 1",
+      "selectedStep": 400,
+      "validationObjective": 0.1946429743394395,
+      "pairAccuracy": 0.965,
+      "meanKL": 0.526091731110786
+    }
+  ]
+}

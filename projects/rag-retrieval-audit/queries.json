@@ -1,0 +1,306 @@
+[
+  {
+    "id": "v1",
+    "split": "validation",
+    "text": "two experts per token",
+    "relevant": [
+      "routecraft-moe"
+    ]
+  },
+  {
+    "id": "t2",
+    "split": "test",
+    "text": "character Shakespeare top two sparse experts",
+    "relevant": [
+      "routecraft-moe"
+    ]
+  },
+  {
+    "id": "t3",
+    "split": "test",
+    "text": "router chooses two networks for each symbol",
+    "relevant": [
+      "routecraft-moe"
+    ]
+  },
+  {
+    "id": "t4",
+    "split": "test",
+    "text": "no token capacity cutoff and normalized mixture weights",
+    "relevant": [
+      "routecraft-moe"
+    ]
+  },
+  {
+    "id": "v5",
+    "split": "validation",
+    "text": "grouped query cache head sharing",
+    "relevant": [
+      "cachecraft-gqa"
+    ]
+  },
+  {
+    "id": "t6",
+    "split": "test",
+    "text": "share keys values across four query heads",
+    "relevant": [
+      "cachecraft-gqa"
+    ]
+  },
+  {
+    "id": "t7",
+    "split": "test",
+    "text": "reduce KV tensor payload without repeating tensors",
+    "relevant": [
+      "cachecraft-gqa"
+    ]
+  },
+  {
+    "id": "t8",
+    "split": "test",
+    "text": "compare MHA GQA MQA storage",
+    "relevant": [
+      "cachecraft-gqa"
+    ]
+  },
+  {
+    "id": "v9",
+    "split": "validation",
+    "text": "draft target speculative decoding rollback",
+    "relevant": [
+      "specforge-tf"
+    ]
+  },
+  {
+    "id": "t10",
+    "split": "test",
+    "text": "reject draft proposals and rewind key value cache",
+    "relevant": [
+      "specforge-tf"
+    ]
+  },
+  {
+    "id": "t11",
+    "split": "test",
+    "text": "Alice Wonderland byte draft verification",
+    "relevant": [
+      "specforge-tf"
+    ]
+  },
+  {
+    "id": "t12",
+    "split": "test",
+    "text": "fewer target calls but no CPU latency improvement",
+    "relevant": [
+      "specforge-tf"
+    ]
+  },
+  {
+    "id": "v13",
+    "split": "validation",
+    "text": "Frankenstein top one balancing ablation",
+    "relevant": [
+      "routeforge-moe"
+    ]
+  },
+  {
+    "id": "t14",
+    "split": "test",
+    "text": "one expert per token without balancing loss",
+    "relevant": [
+      "routeforge-moe"
+    ]
+  },
+  {
+    "id": "t15",
+    "split": "test",
+    "text": "SparseExperts diagnostic tensor balancing term",
+    "relevant": [
+      "routeforge-moe"
+    ]
+  },
+  {
+    "id": "t16",
+    "split": "test",
+    "text": "compare dense and balanced sparse byte decoder",
+    "relevant": [
+      "routeforge-moe"
+    ]
+  },
+  {
+    "id": "v17",
+    "split": "validation",
+    "text": "fixed recurrent attention state sigmoid gate",
+    "relevant": [
+      "streamgate-tf"
+    ]
+  },
+  {
+    "id": "t18",
+    "split": "test",
+    "text": "Sherlock Holmes byte model 8.5 KiB attention state",
+    "relevant": [
+      "streamgate-tf"
+    ]
+  },
+  {
+    "id": "t19",
+    "split": "test",
+    "text": "forgetting gate positive kernel ELU state recurrence",
+    "relevant": [
+      "streamgate-tf"
+    ]
+  },
+  {
+    "id": "t20",
+    "split": "test",
+    "text": "prefix grows but inference state remains constant",
+    "relevant": [
+      "streamgate-tf"
+    ]
+  },
+  {
+    "id": "v21",
+    "split": "validation",
+    "text": "same block applied three times",
+    "relevant": [
+      "Shared-Depth-Byte-Language-Models-TensorFlow"
+    ]
+  },
+  {
+    "id": "t22",
+    "split": "test",
+    "text": "reuse one Transformer block versus three distinct layers",
+    "relevant": [
+      "Shared-Depth-Byte-Language-Models-TensorFlow"
+    ]
+  },
+  {
+    "id": "t23",
+    "split": "test",
+    "text": "smoothed bigram bits per byte Shakespeare",
+    "relevant": [
+      "Shared-Depth-Byte-Language-Models-TensorFlow"
+    ]
+  },
+  {
+    "id": "t24",
+    "split": "test",
+    "text": "reduce parameters by sharing depth but more computation",
+    "relevant": [
+      "Shared-Depth-Byte-Language-Models-TensorFlow"
+    ]
+  },
+  {
+    "id": "v25",
+    "split": "validation",
+    "text": "untrusted prompt text classifier character TF IDF",
+    "relevant": [
+      "llm-prompt-injection-guard"
+    ]
+  },
+  {
+    "id": "t26",
+    "split": "test",
+    "text": "detect adversarial instruction text before sending to language model",
+    "relevant": [
+      "llm-prompt-injection-guard"
+    ]
+  },
+  {
+    "id": "t27",
+    "split": "test",
+    "text": "662 prompts 116 holdout examples",
+    "relevant": [
+      "llm-prompt-injection-guard"
+    ]
+  },
+  {
+    "id": "t28",
+    "split": "test",
+    "text": "security filter character logistic classifier missed fourteen attacks",
+    "relevant": [
+      "llm-prompt-injection-guard"
+    ]
+  },
+  {
+    "id": "v29",
+    "split": "validation",
+    "text": "GAN discriminator Stable Diffusion CIFAKE",
+    "relevant": [
+      "GAN-AI-Image-Detection"
+    ]
+  },
+  {
+    "id": "t30",
+    "split": "test",
+    "text": "train detector from adversarial generator images",
+    "relevant": [
+      "GAN-AI-Image-Detection"
+    ]
+  },
+  {
+    "id": "t31",
+    "split": "test",
+    "text": "discriminator fails to transfer to different synthesis method",
+    "relevant": [
+      "GAN-AI-Image-Detection"
+    ]
+  },
+  {
+    "id": "t32",
+    "split": "test",
+    "text": "supervised scratch CNN compared with adversarial initialization",
+    "relevant": [
+      "GAN-AI-Image-Detection"
+    ]
+  },
+  {
+    "id": "v33",
+    "split": "validation",
+    "text": "bread sourdough recipe",
+    "relevant": []
+  },
+  {
+    "id": "v34",
+    "split": "validation",
+    "text": "visa tax filing Canada",
+    "relevant": []
+  },
+  {
+    "id": "v35",
+    "split": "validation",
+    "text": "Liverpool football tickets",
+    "relevant": []
+  },
+  {
+    "id": "v36",
+    "split": "validation",
+    "text": "diabetes insulin prescription",
+    "relevant": []
+  },
+  {
+    "id": "t37",
+    "split": "test",
+    "text": "replace laptop Windows server motherboard",
+    "relevant": []
+  },
+  {
+    "id": "t38",
+    "split": "test",
+    "text": "mortgage loan interest rates",
+    "relevant": []
+  },
+  {
+    "id": "t39",
+    "split": "test",
+    "text": "chocolate cookie baking recipe",
+    "relevant": []
+  },
+  {
+    "id": "t40",
+    "split": "test",
+    "text": "airport luggage restrictions",
+    "relevant": []
+  }
+]

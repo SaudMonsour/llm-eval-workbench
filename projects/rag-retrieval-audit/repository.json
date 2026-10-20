@@ -1,0 +1,14 @@
+{
+  "name": "rag-retrieval-audit",
+  "description": "Evaluate BM25 and TF-IDF retrieval on your project documentation with relevance labels, abstention, and error analysis.",
+  "topics": [
+    "rag",
+    "bm25",
+    "tf-idf",
+    "information-retrieval",
+    "evaluation",
+    "ai-engineering"
+  ],
+  "intendedVisibility": "public",
+  "releaseDate": "2026-10-21"
+}

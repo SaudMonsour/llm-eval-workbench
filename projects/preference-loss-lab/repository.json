@@ -1,0 +1,14 @@
+{
+  "name": "preference-loss-lab",
+  "description": "DPO preference optimization from scratch with SFT comparisons, gradient checks, held-out accuracy, and KL diagnostics.",
+  "topics": [
+    "dpo",
+    "preference-optimization",
+    "alignment",
+    "llm",
+    "ai-engineering",
+    "javascript"
+  ],
+  "intendedVisibility": "public",
+  "releaseDate": "2026-10-21"
+}

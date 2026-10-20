@@ -1,0 +1,169 @@
+{
+  "seed": 42,
+  "fixture": "Deterministic synthetic Q/K/V, float64, causal CPU reference",
+  "metricScope": "Allocated numeric scratch buffers only; inputs, outputs, JS overhead and GPU memory excluded",
+  "results": [
+    {
+      "tokens": 64,
+      "scale": 1,
+      "block": 1,
+      "maxAbsError": 2.220446049250313e-16,
+      "denseScratchBytes": 32768,
+      "onlineScratchBytes": 136,
+      "scratchReduction": 240.94117647058823
+    },
+    {
+      "tokens": 64,
+      "scale": 1,
+      "block": 8,
+      "maxAbsError": 1.6653345369377348e-16,
+      "denseScratchBytes": 32768,
+      "onlineScratchBytes": 192,
+      "scratchReduction": 170.66666666666666
+    },
+    {
+      "tokens": 64,
+      "scale": 1,
+      "block": 32,
+      "maxAbsError": 1.6653345369377348e-16,
+      "denseScratchBytes": 32768,
+      "onlineScratchBytes": 384,
+      "scratchReduction": 85.33333333333333
+    },
+    {
+      "tokens": 64,
+      "scale": 40,
+      "block": 1,
+      "maxAbsError": 1.1102230246251565e-16,
+      "denseScratchBytes": 32768,
+      "onlineScratchBytes": 136,
+      "scratchReduction": 240.94117647058823
+    },
+    {
+      "tokens": 64,
+      "scale": 40,
+      "block": 8,
+      "maxAbsError": 1.1102230246251565e-16,
+      "denseScratchBytes": 32768,
+      "onlineScratchBytes": 192,
+      "scratchReduction": 170.66666666666666
+    },
+    {
+      "tokens": 64,
+      "scale": 40,
+      "block": 32,
+      "maxAbsError": 1.1102230246251565e-16,
+      "denseScratchBytes": 32768,
+      "onlineScratchBytes": 384,
+      "scratchReduction": 85.33333333333333
+    },
+    {
+      "tokens": 128,
+      "scale": 1,
+      "block": 1,
+      "maxAbsError": 2.7755575615628914e-16,
+      "denseScratchBytes": 131072,
+      "onlineScratchBytes": 136,
+      "scratchReduction": 963.7647058823529
+    },
+    {
+      "tokens": 128,
+      "scale": 1,
+      "block": 8,
+      "maxAbsError": 2.220446049250313e-16,
+      "denseScratchBytes": 131072,
+      "onlineScratchBytes": 192,
+      "scratchReduction": 682.6666666666666
+    },
+    {
+      "tokens": 128,
+      "scale": 1,
+      "block": 32,
+      "maxAbsError": 2.220446049250313e-16,
+      "denseScratchBytes": 131072,
+      "onlineScratchBytes": 384,
+      "scratchReduction": 341.3333333333333
+    },
+    {
+      "tokens": 128,
+      "scale": 40,
+      "block": 1,
+      "maxAbsError": 2.220446049250313e-16,
+      "denseScratchBytes": 131072,
+      "onlineScratchBytes": 136,
+      "scratchReduction": 963.7647058823529
+    },
+    {
+      "tokens": 128,
+      "scale": 40,
+      "block": 8,
+      "maxAbsError": 2.220446049250313e-16,
+      "denseScratchBytes": 131072,
+      "onlineScratchBytes": 192,
+      "scratchReduction": 682.6666666666666
+    },
+    {
+      "tokens": 128,
+      "scale": 40,
+      "block": 32,
+      "maxAbsError": 2.220446049250313e-16,
+      "denseScratchBytes": 131072,
+      "onlineScratchBytes": 384,
+      "scratchReduction": 341.3333333333333
+    },
+    {
+      "tokens": 256,
+      "scale": 1,
+      "block": 1,
+      "maxAbsError": 1.942890293094024e-16,
+      "denseScratchBytes": 524288,
+      "onlineScratchBytes": 136,
+      "scratchReduction": 3855.0588235294117
+    },
+    {
+      "tokens": 256,
+      "scale": 1,
+      "block": 8,
+      "maxAbsError": 2.498001805406602e-16,
+      "denseScratchBytes": 524288,
+      "onlineScratchBytes": 192,
+      "scratchReduction": 2730.6666666666665
+    },
+    {
+      "tokens": 256,
+      "scale": 1,
+      "block": 32,
+      "maxAbsError": 1.942890293094024e-16,
+      "denseScratchBytes": 524288,
+      "onlineScratchBytes": 384,
+      "scratchReduction": 1365.3333333333333
+    },
+    {
+      "tokens": 256,
+      "scale": 40,
+      "block": 1,
+      "maxAbsError": 1.1102230246251565e-16,
+      "denseScratchBytes": 524288,
+      "onlineScratchBytes": 136,
+      "scratchReduction": 3855.0588235294117
+    },
+    {
+      "tokens": 256,
+      "scale": 40,
+      "block": 8,
+      "maxAbsError": 1.1102230246251565e-16,
+      "denseScratchBytes": 524288,
+      "onlineScratchBytes": 192,
+      "scratchReduction": 2730.6666666666665
+    },
+    {
+      "tokens": 256,
+      "scale": 40,
+      "block": 32,
+      "maxAbsError": 1.1102230246251565e-16,
+      "denseScratchBytes": 524288,
+      "onlineScratchBytes": 384,
+      "scratchReduction": 1365.3333333333333
+    }
+  ]
+}

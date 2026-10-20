@@ -1,0 +1,14 @@
+{
+  "name": "online-softmax-attention",
+  "description": "Stable online softmax attention from scratch with dense-equivalence tests and explicit scratch-memory accounting.",
+  "topics": [
+    "attention",
+    "transformers",
+    "online-softmax",
+    "llm",
+    "ai-engineering",
+    "javascript"
+  ],
+  "intendedVisibility": "public",
+  "releaseDate": "2026-10-21"
+}

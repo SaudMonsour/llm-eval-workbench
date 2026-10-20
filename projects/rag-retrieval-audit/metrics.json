@@ -1,0 +1,54 @@
+{
+  "corpusDocuments": 8,
+  "validationQueries": 12,
+  "testQueries": 28,
+  "queryProvenance": "Author-written relevance fixtures based on the corpus, not independent user queries",
+  "retrievalScope": "Whole README document retrieval; lexical only; no embeddings, generator or answer faithfulness evaluation",
+  "results": [
+    {
+      "method": "overlap",
+      "answerableQueries": 24,
+      "recallAt1": 0.8333333333333334,
+      "recallAt3": 0.9583333333333334,
+      "mrr": 0.8940972222222223,
+      "threshold": 2,
+      "validationCorrect": 12,
+      "validationCount": 12,
+      "testDecisionAccuracy": 0.8214285714285714,
+      "answerableAccepted": 23,
+      "correctAccepted": 19,
+      "oodAccepted": 0,
+      "oodCount": 4
+    },
+    {
+      "method": "tfidf",
+      "answerableQueries": 24,
+      "recallAt1": 0.9583333333333334,
+      "recallAt3": 1,
+      "mrr": 0.9722222222222222,
+      "threshold": 0.052527095409640866,
+      "validationCorrect": 11,
+      "validationCount": 12,
+      "testDecisionAccuracy": 0.9642857142857143,
+      "answerableAccepted": 24,
+      "correctAccepted": 23,
+      "oodAccepted": 0,
+      "oodCount": 4
+    },
+    {
+      "method": "bm25",
+      "answerableQueries": 24,
+      "recallAt1": 0.9583333333333334,
+      "recallAt3": 0.9583333333333334,
+      "mrr": 0.9635416666666666,
+      "threshold": 4.687709704509498,
+      "validationCorrect": 11,
+      "validationCount": 12,
+      "testDecisionAccuracy": 0.9642857142857143,
+      "answerableAccepted": 24,
+      "correctAccepted": 23,
+      "oodAccepted": 0,
+      "oodCount": 4
+    }
+  ]
+}

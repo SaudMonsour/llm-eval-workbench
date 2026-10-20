@@ -1,0 +1,14 @@
+{
+  "name": "rag-retrieval-audit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline BM25 and TF-IDF retrieval evaluation with source snapshots, relevance fixtures, and failure analysis.",
+  "scripts": {
+    "test": "node test.js",
+    "study": "node study.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
