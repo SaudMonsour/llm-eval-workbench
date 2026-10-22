@@ -1,32 +1,25 @@
-# LLM Eval Workbench
+# مختبر تقييم وهندسة النماذج اللغوية
 
-A small command-line tool for checking recorded LLM answers before changing a prompt or switching models.
+أداة لفحص إجابات النماذج اللغوية المسجّلة، مع دراسات مستقلة لمكونات التعلم والاستدلال والاسترجاع.
 
-## What it does
+## تقييم الإجابات
+تقرأ الأداة سجلات JSONL وتنتج درجات وملخصًا. تشمل المقاييس المطابقة النصية الموحّدة، وفحص العبارات غير المرغوبة، وزمن الاستجابة الوسيط والمئين 95، والتكلفة المورّدة مع السجل، والحالات الفاشلة.
 
-Read response records from JSONL and write a JSON result plus a Markdown report. Each report includes normalized exact-match accuracy, forbidden-phrase checks, median and p95 latency, supplied cost, and failed case IDs. Different case sets produce a comparison warning rather than a misleading ranking.
+حقول السجل هي `id` و`model` و`response` و`expected` و`latency_ms` و`cost_usd`، مع قائمة اختيارية للعبارات المحظورة. يجب أن تكون القيم العددية منتهية وغير سالبة، والمعرّفات فريدة داخل كل نموذج.
 
-The first version runs entirely offline and uses only Python's standard library. It makes no API calls and needs no API key. Bring records from your own application; latency and cost are supplied measurements, not estimates made by this tool.
+تعتمد الأداة الأساسية على مكتبة Python القياسية، ولا تستدعي خدمات خارجية. بيانات المثال مكتوبة لاختبار الأداة وليست مخرجات نماذج حقيقية؛ الأزمنة والتكاليف فيها توضيحية. المطابقة النصية لا تكفي للحكم على جودة الكتابة المفتوحة، وفحص العبارات لا يوفر ضمانًا أمنيًا.
 
-## Record format
+## الدراسات
+- [التضمين الدوراني والانتباه](projects/rotary-attention-kit/README.md).
+- [تدقيق تكميم الأوزان](projects/quantization-audit/README.md).
+- [المكيّفات منخفضة الرتبة](projects/lora-adapter-lab/README.md).
+- [حساب الانتباه بالتطبيع المتتابع](projects/online-softmax-attention/README.md).
+- [تحسين التفضيلات](projects/preference-loss-lab/README.md).
+- [تقييم استرجاع مستندات المشاريع](projects/rag-retrieval-audit/README.md).
 
-Each line contains `id`, `model`, `response`, `expected`, `latency_ms`, and `cost_usd`. An optional `forbidden` list checks for unwanted phrases. IDs must be unique within each model. Numeric measurements must be finite and nonnegative.
+## الملفات
+`evaluate.py` للتقييم، و`tests/` للفحوص، و`examples/` للأمثلة، و`projects/` للدراسات. تتضمن كل دراسة سؤالها ونتائجها واختباراتها وحدودها ومراجعها.
 
-## Current scope
+طُوّر المشروع لسعود العتيبي بمساعدة أدوات الذكاء الاصطناعي. لا تُنسب إليه اختبارات خدمات أو نتائج معيارية لم تُنفّذ.
 
-This is an evaluation utility, not a trained model or a published LLM benchmark. The example records are handwritten fixtures, not real model outputs. They exercise both successful and failed answers; their timings are illustrative.
-
-Exact match ignores case and repeated whitespace but keeps punctuation. It is useful for short factual answers and structured test cases, not open-ended writing. Phrase matching is a diagnostic check, not a security guarantee. p95 uses linear interpolation; small samples do not establish reliable production latency.
-
-## Files
-
-- `evaluate.py`: validation, scoring, and report generation.
-- `tests/test_evaluate.py`: unit tests for scoring and rejected inputs.
-- `examples/fixtures.jsonl`: clearly labeled example records.
-- `examples/result/`: output from the fixture run.
-
-Python 3.10 or newer is required. There are no third-party dependencies.
-
-## Development
-
-Created for Saud Alotaibi's AI engineering portfolio with AI-assisted implementation. The goal is a useful, inspectable tool rather than a benchmark claim. Live provider adapters and semantic scoring are not implemented yet.
+[المرجع التقني الإنجليزي الكامل](README.en.md).

@@ -1,53 +1,43 @@
-# Rotary Attention Kit
+# التضمين الدوراني والانتباه السببي
 
-NumPy rotary positional embeddings and causal attention with incremental-decoding equivalence checks.
+تنفيذ مرجعي باستخدام NumPy لدوران المواضع والانتباه السببي، مع مقارنة الحساب الكامل بالحساب التدريجي.
 
----
+تستخدم التجربة موترات عشوائية مضبوطة بالبذرة 42: أربعة رؤوس و64 موضعًا وعرض رأس 32. تقيس الفحوص حفظ معيار المتجه، وعدم تغير النتيجة عند إزاحة المواضع معًا، وتطابق الحساب التدريجي ومنع الانتباه للمستقبل.
 
-## Overview
+اختُبرت ست حالات صحة ورفض للمدخلات. تستخدم الخوارزمية ترتيب الأزواج المتجاورة؛ الأوزان التي تستخدم تقسيم نصف المتجه تحتاج إلى تحويل متوافق.
 
-* **Task:** Verify a reference implementation of rotary positions and causal scaled dot-product attention.
-* **Input:** 4 heads, 64 tokens, 32 values per head; seeded synthetic Gaussian tensors.
-* **Scope:** Architecture unit study. No model training, language-quality score, or NVIDIA runtime benchmark.
-* **NCA-GENL connection:** Transformer foundations, implementation testing, and deployment correctness.
+هذه دراسة تحقق عددي دون تدريب نموذج لغوي أو قياس جودة اللغة. التنفيذ ينشئ مصفوفة الدرجات كاملة، ولا يمثل نواة FlashAttention أو مدير صفحات للذاكرة المخبأة.
 
----
+## النتائج المسجّلة
 
-## Key Results
+الأرقام التالية من التنفيذ المحفوظ لهذه النسخة؛ لم تُعَد التجارب أثناء تعريب التوثيق.
 
-| Check | Maximum absolute error |
+### النتائج الرئيسية
+
+| الفحص | أكبر خطأ مطلق |
 | :--- | ---: |
-| Full sequence vs incremental attention | 8.882e-16 |
-| Shared position shift by 137 | 4.108e-15 |
-| Vector norm after rotation | 8.882e-16 |
-| Attention assigned to future keys | 0.0 |
+| الانتباه الكامل مقارنةً بالتدريجي | 8.882e-16 |
+| إزاحة المواضع معًا بمقدار 137 | 4.108e-15 |
+| معيار المتجه بعد الدوران | 8.882e-16 |
+| الانتباه المخصص للمفاتيح المستقبلية | 0.0 |
 
-The incremental path rotates keys using their original absolute positions and keeps all previous keys and values. Re-indexing cached keys from zero changes the computation. The tiny nonzero errors above are floating-point roundoff; causally masked probabilities are exactly zero.
+## الرسوم والنتائج المرئية
 
-## Design
+![رسم 1: الانتباه السببي](figures/attention.png)
 
-For each adjacent pair, apply a 2D rotation by position times an inverse frequency. Query and key rotations share the same frequencies. Their dot product depends on the position difference. The implementation uses the adjacent-pair convention; checkpoints using a split-half layout need a conversion.
+![رسم 2: أثر الموضع النسبي](figures/relative-position.png)
 
-`rope(x, positions)` accepts `[heads, tokens, even_head_dim]`. `attention(q, k, v, q_positions, k_positions)` returns both outputs and probabilities. Explicit positions let a single new query attend to an existing prefix. Inputs and visible-key counts are validated.
+الرسوم محفوظة من التنفيذ الأصلي. تعريب هذه الصفحة لا يغيّر بياناتها أو تسميات الصور داخل الملفات.
 
-## Visualizations
+## الملفات المرجعية
 
-| Causal attention | Relative-position score |
-| :---: | :---: |
-| ![Causal probabilities](figures/attention.png) | ![Position dependent score](figures/relative-position.png) |
+- [مقاييس التقييم والنتائج](metrics.json).
+- [بيانات التدقيق وبيئة التنفيذ](audit.json).
 
-The score curve uses one fixed random query/key pair. It need not decrease monotonically with distance and does not demonstrate language understanding or context extrapolation.
+## المصادر والإسناد
 
-## Repository Structure
+- [مصدر 1: RoFormer paper](https://arxiv.org/abs/2104.09864).
+- [مصدر 2: NVIDIA KV-cache documentation](https://docs.nvidia.com/deeplearning/tensorrt/latest/inference-library/transformers-kv-cache.html).
+- [مصدر 3: NCA-GENL topics](https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/).
 
-* `attention.py`: reusable rotations and attention.
-* `study.py`: executed numerical checks and charts.
-* `test_attention.py`: six correctness and rejection tests.
-* `metrics.json`, `audit.json`: measurements and execution evidence.
-* `figures/`: two measured diagnostic plots.
-
-## Limits and Sources
-
-This CPU reference allocates the complete score matrix. It is not FlashAttention, a paged-cache allocator, or a complete transformer. Shift equivalence does not establish long-context generalization. Cross-validation and classification metrics do not apply to this numerical verification.
-
-Sources: [RoFormer paper](https://arxiv.org/abs/2104.09864), [NVIDIA KV-cache documentation](https://docs.nvidia.com/deeplearning/tensorrt/latest/inference-library/transformers-kv-cache.html), [NCA-GENL topics](https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/).
+[المرجع التقني الإنجليزي الكامل](README.en.md) يحفظ تفاصيل النسخة الأصلية. تُترك أسماء الملفات والأوامر ومعرّفات النماذج والمقاييس بصيغتها التقنية لضمان تطابقها مع الكود.

@@ -1,81 +1,52 @@
-# Online Softmax Attention
+# الانتباه بالتطبيع المتتابع
 
-Compute exact causal attention one key block at a time, and verify how numerical accuracy and allocated scratch storage compare with a dense score matrix.
+تنفيذ مرجعي يحسب الانتباه السببي كتلةً من المفاتيح بعد أخرى، مع الحفاظ على النتيجة العددية ومقارنة المساحات المؤقتة المحجوزة.
 
----
+شملت التجربة 18 تركيبًا: أطوال 64 و128 و256 رمزًا، وأحجام كتل 1 و8 و32، ومقياسا مدخلات 1 و40. عرض المفاتيح والاستعلامات 32، والقيم 16. بلغ أقصى فرق مطلق عبر الحالات 2.776e-16 تقريبًا.
 
-## Overview
+يحفظ الحساب أقصى درجة ومجموع الأوزان وبسط القيم الموزونة. عند ارتفاع الدرجة القصوى يعاد تقييس المجموع السابق قبل إضافة الكتلة، ثم يجري التطبيع النهائي.
 
-* **Task:** Transformer attention implementation and numerical validation.
-* **Inputs:** Deterministic synthetic Q/K/V arrays; 64, 128, or 256 tokens; query/key width 32; value width 16.
-* **Comparison:** Dense stable softmax versus online blocks of 1, 8, and 32 keys, at input scales 1 and 40.
-* **Main result:** Maximum absolute output difference across all 18 configurations was **2.776e-16**.
-* **Scope:** CPU JavaScript reference calculations. No trained language model or GPU kernel.
+الأحجام في الجداول تخص المصفوفات العددية المؤقتة الفعلية؛ تستبعد المدخلات والمخرجات وكائنات JavaScript وتخصيصات التحقق وذاكرة العملية الكلية. يبقى العمل الحسابي تربيعيًا. لا يعني نقص التخزين المؤقت تسارعًا مثبتًا.
 
----
+اجتازت ثمانية فحوص حالات السببية والكتل غير المكتملة والقيم الكبيرة والتكافؤ ورفض المدخلات غير المنتهية. نُفذت الحسابات بلغة JavaScript في بيئة V8؛ أوامر Node موجودة ولم تُختبر كنقاط دخول في التنفيذ الأصلي. التنفيذ ليس نواة GPU أو إعادة إنتاج كاملة لـ FlashAttention.
 
-## Key Results
+## النتائج المسجّلة
 
-### Allocated Numeric Scratch Buffers
+الأرقام التالية من التنفيذ المحفوظ لهذه النسخة؛ لم تُعَد التجارب أثناء تعريب التوثيق.
 
-| Tokens | Dense score matrix | Online, block 32 | Reduction |
+### المساحات العددية المؤقتة المحجوزة
+
+| الرموز | مصفوفة الدرجات الكثيفة | التطبيع المتتابع، كتلة 32 | مقدار الانخفاض |
 | :--- | ---: | ---: | ---: |
 | 64 | 32,768 bytes | 384 bytes | 85.3× |
 | 128 | 131,072 bytes | 384 bytes | 341.3× |
 | 256 | 524,288 bytes | 384 bytes | 1,365.3× |
 
-These are the byte lengths of the actual scratch arrays allocated by the implementations. They exclude input arrays, output arrays, JavaScript object overhead, validation allocations, and total process memory. The online algorithm still performs quadratic attention work. Smaller scratch storage does not establish faster execution.
+### فحص الإجهاد العددي: 256 رمزًا ومقياس مدخلات 40
 
-### Numerical Stress Check: 256 Tokens, Input Scale 40
-
-| Block size | Maximum absolute error |
+| حجم الكتلة | أكبر خطأ مطلق |
 | :--- | ---: |
 | 1 | 1.1102e-16 |
 | 8 | 1.1102e-16 |
 | 32 | 1.1102e-16 |
 
-Scale 40 produces large logits that would make naive exponentiation overflow. Both implementations subtract a running maximum before exponentiation. Inputs are finite, but arbitrarily huge values that overflow the dot product are outside the supported numerical range.
+## الرسوم والنتائج المرئية
 
----
+![رسم 1: حجم المساحات العددية المؤقتة](figures/scratch-storage.svg)
 
-## Design
+![رسم 2: الخطأ العددي](figures/numerical-error.svg)
 
-For each query, maintain a running score maximum, a denominator, and a weighted-value numerator. When a later block raises the maximum, rescale the old denominator and numerator before adding the new block. Dividing at the end recovers the same attention result up to floating-point rounding.
+الرسوم محفوظة من التنفيذ الأصلي. تعريب هذه الصفحة لا يغيّر بياناتها أو تسميات الصور داخل الملفات.
 
-The causal path excludes keys after the query position. Noncausal attention is also supported. Inputs use flat Float64Array-compatible arrays; core.js exports dense and online functions. The block size changes the scratch buffer, not the mathematical attention definition.
+## الملفات المرجعية
 
-This is the online-softmax principle used in memory-efficient attention. It does **not** implement FlashAttention's GPU tiling, IO scheduling, backward pass, or CUDA kernels.
+- [مقاييس التقييم والنتائج](metrics.json).
+- [بيانات التدقيق وبيئة التنفيذ](audit.json).
+- [تفاصيل استخدام الأداة](USAGE.md).
 
----
+## المصادر والإسناد
 
-## Visualizations
+- [مصدر 1: FlashAttention, official implementation and paper references](https://github.com/Dao-AILab/flash-attention).
+- [مصدر 2: Online normalizer calculation for softmax](https://arxiv.org/abs/1805.02867).
 
-| Numeric scratch storage | Output error |
-| :---: | :---: |
-| ![Scratch buffers](figures/scratch-storage.svg) | ![Numerical error](figures/numerical-error.svg) |
-
----
-
-## Validation and Failure Analysis
-
-Eight tests check three block sizes, ragged final blocks, high-magnitude scores, future-value isolation under causal masking, noncausal equivalence, a single-token identity, and rejection of nonfinite inputs. All passed in the available V8 runtime. The high-scale check shows numerical stability for this fixture, not a universal floating-point guarantee.
-
-Cross-validation, dummy classifiers, and holdout accuracy do not apply to this numerical-equivalence study. Runtime timings and total heap usage were deliberately not estimated.
-
-## Repository Structure
-
-* core.js — reusable dense and online attention.
-* study.js — seeded fixture and 18 executed configurations.
-* test.js — eight correctness checks.
-* metrics.json — complete measured errors and numeric buffer sizes.
-* figures/ — two charts drawn from the recorded measurements.
-* audit.json — runtime, test evidence, and execution limits.
-* repository.json — standalone name, description, and topics.
-* USAGE.md — command-line usage.
-
-## Sources
-
-* [FlashAttention, official implementation and paper references](https://github.com/Dao-AILab/flash-attention).
-* [Online normalizer calculation for softmax](https://arxiv.org/abs/1805.02867).
-
-Original reference implementation for Saud Alotaibi's AI engineering portfolio. No NVIDIA endorsement is implied.
+[المرجع التقني الإنجليزي الكامل](README.en.md) يحفظ تفاصيل النسخة الأصلية. تُترك أسماء الملفات والأوامر ومعرّفات النماذج والمقاييس بصيغتها التقنية لضمان تطابقها مع الكود.
