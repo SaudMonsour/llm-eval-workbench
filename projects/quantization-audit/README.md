@@ -1,48 +1,60 @@
-# تدقيق تكميم الأوزان
+# Quantization Audit
 
-مقارنة تخزين الأوزان بأربعة أو ثمانية بتات، مع قياس تغير التنبؤات والخسارة وحجم المعاملات.
+Compare packed INT4 and INT8 weight storage, output drift, and holdout accuracy with a reusable NumPy quantizer.
 
-استخدمت التجربة 1,797 صورة رقمية صغيرة و64 خاصية وعشر فئات. دُرب الانحدار اللوجستي على 1,437 عينة، مع 360 عينة اختبار محفوظة. ملاءمة التقييس تمت على التدريب فقط.
+---
 
-حُفظت أوزان الأربع بتات فعليًا بقيمتين داخل البايت. تشمل أحجام الجدول الأوزان ومقاييس التكميم والانحيازات، ولا تشمل التقييس أو حاوية الملف أو كامل التطبيق.
+## Overview
 
-حافظ التكميم بثمانية بتات ومقياس موحد على تنبؤات المرجع كلها. خفض مقياس القنوات خطأ الدرجات في حالة الأربع بتات لكنه لم يحسن دقة التصنيف؛ انحراف الدرجات والدقة مقياسان مختلفان.
+* **Task:** Weight-only post-training quantization audit.
+* **Dataset:** 1,797 real handwritten digits, 64 pixel features, 10 classes.
+* **Model:** Multinomial logistic regression trained on 1,437 samples; 360 held out.
+* **NCA-GENL connection:** Model comparison, evaluation, compression, and deployment tradeoffs.
 
-يفك التنفيذ التكميم قبل ضرب المصفوفات بالفاصلة العائمة، فلا توجد نواة ضرب صحيحة أو دعوى تسارع رسومي. لا تمثل النتيجة حيرة نموذج لغوي أو قدرته على الإجابة.
+---
 
-## النتائج المسجّلة
+## Key Results
 
-الأرقام التالية من التنفيذ المحفوظ لهذه النسخة؛ لم تُعَد التجارب أثناء تعريب التوثيق.
+### Final Holdout Evaluation (360 Samples)
 
-### التقييم النهائي على الاختبار المحفوظ (360 عينة)
-
-| تمثيل الأوزان | الدقة | الخسارة اللوغاريتمية | حجم المعاملات بالبايت | تغيرات التنبؤ مقارنةً بـ FP32 |
+| Representation | Accuracy | Log loss | Parameter bytes | Prediction flips vs FP32 |
 | :--- | ---: | ---: | ---: | ---: |
 | FP32 | 0.9722 | 0.1020 | 2600 | 0 |
-| INT8 بمقياس واحد للموتر | 0.9722 | 0.1023 | 684 | 0 |
-| INT8 بمقياس لكل قناة | 0.9750 | 0.1035 | 720 | 1 |
-| INT4 بمقياس واحد للموتر | 0.9694 | 0.0919 | 364 | 6 |
-| INT4 بمقياس لكل قناة | 0.9556 | 0.1195 | 400 | 6 |
+| INT8 tensor | 0.9722 | 0.1023 | 684 | 0 |
+| INT8 channel | 0.9750 | 0.1035 | 720 | 1 |
+| INT4 tensor | 0.9694 | 0.0919 | 364 | 6 |
+| INT4 channel | 0.9556 | 0.1195 | 400 | 6 |
 
-## الرسوم والنتائج المرئية
+FP32 is the reference, not a dummy classifier. These are fixed-method comparisons, not a holdout-tuned model selection. INT8 tensor quantization preserved every reference prediction. INT4 channel quantization reduced logit RMSE relative to INT4 tensor quantization but had worse classification accuracy: output drift and accuracy measure different things. One extra correct prediction from INT8 channel is insufficient evidence of improved generalization.
 
-![رسم 1: دقة الاختبار](figures/accuracy.png)
+## Data Summary
 
-![رسم 2: حجم المعاملات بالبايت](figures/parameter_bytes.png)
+* **Source:** scikit-learn's bundled [digits dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html), originating from [UCI Optical Recognition of Handwritten Digits](https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits).
+* **Preprocessing:** Stratified split with seed 42. Standardization is fitted only on training samples. The fitted scaler is included with the weights.
+* **Comparison controls:** Identical trained weights, bias, holdout, and preprocessing for all representations. No seed search or calibration on the holdout.
 
-الرسوم محفوظة من التنفيذ الأصلي. تعريب هذه الصفحة لا يغيّر بياناتها أو تسميات الصور داخل الملفات.
+## Design
 
-## الملفات المرجعية
+Quantization rounds to signed symmetric ranges [-127,127] or [-7,7]. Per-channel scales refer to output columns. Two 4-bit signed values occupy each byte, including odd-length padding. Reported bytes include packed weights, float32 scales, and float32 biases. They exclude scaler arrays and file/container overhead, so they are not the size of a complete deployed application.
 
-- [مقاييس التقييم والنتائج](metrics.json).
-- [بيانات التدقيق وبيئة التنفيذ](audit.json).
-- [سجل أخطاء الاختبار](error_analysis.csv).
+Inference unpacks and dequantizes weights before floating-point multiplication. Storage is compressed; CPU arithmetic is not an integer kernel. No latency or GPU speedup is claimed.
 
-## المصادر والإسناد
+## Visualizations
 
-- [مصدر 1: digits dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html).
-- [مصدر 2: UCI Optical Recognition of Handwritten Digits](https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits).
-- [مصدر 3: NVIDIA quantization documentation](https://nvidia.github.io/TensorRT-LLM/latest/features/quantization.html).
-- [مصدر 4: NCA-GENL topics](https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/).
+| Holdout accuracy | Parameter storage |
+| :---: | :---: |
+| ![Accuracy](figures/accuracy.png) | ![Bytes](figures/parameter_bytes.png) |
 
-[المرجع التقني الإنجليزي الكامل](README.en.md) يحفظ تفاصيل النسخة الأصلية. تُترك أسماء الملفات والأوامر ومعرّفات النماذج والمقاييس بصيغتها التقنية لضمان تطابقها مع الكود.
+## Repository Structure
+
+* `quantize.py`: quantization, signed-nibble packing, and unpacking.
+* `study.py`: real-data training, fixed comparisons, and charts.
+* `test_quantize.py`: six tests covering zero weights, quantization error bounds, outliers, odd lengths, and invalid inputs.
+* `weights.npz`: FP32 reference weights, bias, and training-fitted scaler.
+* `metrics.json`, `audit.json`: results and execution evidence.
+
+## Limits and Sources
+
+This small classifier isolates quantization mechanics. It cannot establish LLM perplexity, factuality, or performance on NVIDIA GPUs. Cross-validation was not run; the design is a fixed post-training audit with one holdout, not a training model search. Tensor and channel scaling are different tradeoffs; neither is universally superior.
+
+Sources: [NVIDIA quantization documentation](https://nvidia.github.io/TensorRT-LLM/latest/features/quantization.html), dataset links above, [NCA-GENL topics](https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/).

@@ -1,54 +1,89 @@
-# تقييم استرجاع مستندات المشاريع
+# RAG Retrieval Audit
 
-مقارنة استرجاع معجمي على ثمانية ملفات تعريف حقيقية من مشاريع سعود العتيبي، مع حفظ النصوص وروابط المصادر وبصمات كائنات Git.
+Compare lexical retrievers on Saud Alotaibi's engineering documentation, retaining relevance labels, abstentions, and failed queries.
 
-تتضمن المجموعة 12 استعلام تحقق و28 للاختبار؛ 24 منها قابلة للإجابة وأربعة خارج المحتوى. قورنت مطابقة الكلمات وTF-IDF وBM25. معاملات BM25 ثابتة، ويُختار حد الامتناع على التحقق فقط.
+---
 
-جلب كل من BM25 وTF-IDF المستند الصحيح أولًا في 23 من 24 استعلامًا قابلًا للإجابة. في السؤال المتبقي وجد TF-IDF المرجع ضمن الثلاثة الأوائل، بينما لم يفعل BM25.
+## Overview
 
-أخطأت الطرق الثلاث في سؤال كشف تعليمات هجومية، فأعادت مشروع الصور أولًا بسبب تشابه مفردات الهجوم بين مجالين. رفضت الطرق الثلاث جميع الأسئلة الأربعة الخارجة عن المجموعة، لكن أربع حالات لا تكفي لإثبات امتناع آمن في الإنتاج.
+* **Task:** Candidate-document retrieval for a RAG pipeline.
+* **Corpus:** Eight actual public project README snapshots, with original URLs and Git blob SHAs.
+* **Evaluation:** 12 validation queries and 28 test queries; 24 test queries have one relevant document and four are outside the corpus.
+* **Methods:** Unique-token overlap baseline, TF-IDF cosine similarity, and BM25.
+* **Scope:** Whole-document lexical retrieval. No embedding model, answer generator, or factuality judge.
 
-كُتبت الاستعلامات بعد قراءة المستندات؛ هي حالات اختبار مؤلفة وليست حركة مستخدمين مستقلة أو معيارًا خارجيًا. يقتصر التقييم على استرجاع ملفات كاملة، دون تضمينات دلالية أو مولّد إجابة أو فحص للصدق. تبقى ادعاءات النتائج التاريخية داخل النسخ بيانات قابلة للبحث، ولم تُعَد تجاربها.
+---
 
-اجتازت ثمانية فحوص صحة. حُفظت جميع القرارات الـ84 مع الدرجات والمراجع المتوقعة وأعلى ثلاث نتائج.
+## Key Results
 
-## النتائج المسجّلة
+### Answerable Test Queries: 24
 
-الأرقام التالية من التنفيذ المحفوظ لهذه النسخة؛ لم تُعَد التجارب أثناء تعريب التوثيق.
-
-### استعلامات الاختبار القابلة للإجابة: 24
-
-| الطريقة | الاستدعاء عند الرتبة 1 | الاستدعاء عند الرتبة 3 | متوسط مقلوب الرتبة |
+| Method | Recall@1 | Recall@3 | Mean reciprocal rank |
 | :--- | ---: | ---: | ---: |
-| تداخل الكلمات | 0.8333 | 0.9583 | 0.8941 |
-| TF-IDF | 0.9583 | 1.0000 | 0.9722 |
-| BM25 | 0.9583 | 0.9583 | 0.9635 |
+| overlap | 0.8333 | 0.9583 | 0.8941 |
+| tfidf | 0.9583 | 1.0000 | 0.9722 |
+| bm25 | 0.9583 | 0.9583 | 0.9635 |
 
-### الاسترجاع مع الامتناع: جميع استعلامات الاختبار الـ28
+BM25 and TF-IDF each retrieved the correct project first for 23 of 24 queries. TF-IDF recovered the remaining relevant project by rank 3; BM25 did not. The overlap baseline is sensitive to document length and shared vocabulary.
 
-| الطريقة | القرار الصحيح | الاستعلامات القابلة للإجابة المقبولة | الاستعلامات المقبولة خارج المجموعة |
+### Retrieval With Abstention: All 28 Test Queries
+
+| Method | Correct decision | Answerable queries accepted | Outside-corpus queries accepted |
 | :--- | ---: | ---: | ---: |
-| تداخل الكلمات | 82.14% | 23/24 | 0/4 |
-| TF-IDF | 96.43% | 24/24 | 0/4 |
-| BM25 | 96.43% | 24/24 | 0/4 |
+| overlap | 82.14% | 23/24 | 0/4 |
+| tfidf | 96.43% | 24/24 | 0/4 |
+| bm25 | 96.43% | 24/24 | 0/4 |
 
-## الرسوم والنتائج المرئية
+A correct answerable decision requires both accepting the query and ranking its relevant document first. A correct outside-corpus decision requires abstaining. Each method's score threshold was selected on the validation queries; the test set did not set the threshold. Four negative test cases are far too few to establish safe production abstention.
 
-![رسم 1: جودة استرجاع المستندات](figures/retrieval-quality.svg)
+---
 
-![رسم 2: متوسط مقلوب الرتبة](figures/reciprocal-rank.svg)
+## Data Summary
 
-الرسوم محفوظة من التنفيذ الأصلي. تعريب هذه الصفحة لا يغيّر بياناتها أو تسميات الصور داخل الملفات.
+corpus.json preserves the fetched README text, source URL, and Git blob SHA for each of eight repositories: RouteCraft, CacheCraft, SpecForge, RouteForge, StreamGate, Shared-Depth, Prompt Injection Guard, and GAN Image Detection.
 
-## الملفات المرجعية
+The queries and relevance labels were written for this study after reading the corpus. Validation and test queries are different strings but cover the same projects. They are **not independent user traffic** or an external benchmark. Familiarity with the documents and lexical overlap can inflate the scores. The corpus's historical benchmark claims are treated as searchable text, not re-executed or independently verified in this study.
 
-- [مقاييس التقييم والنتائج](metrics.json).
-- [بيانات التدقيق وبيئة التنفيذ](audit.json).
-- [نتائج الاستعلامات بالتفصيل](query-results.json).
-- [تفاصيل استخدام الأداة](USAGE.md).
+## Design
 
-## المصادر والإسناد
+Tokenization applies Unicode normalization, lowercasing, punctuation splitting, and a fixed small stopword list. Document/query counts drive TF-IDF; BM25 uses k1 = 1.2 and b = 0.75. These settings were fixed before evaluation.
 
-- [مصدر 1: Lucene BM25 implementation](https://github.com/apache/lucene/blob/main/lucene/core/src/java/org/apache/lucene/search/similarities/BM25Similarity.java).
+Index exposes search(query, method, k), returning document IDs and scores. Ties sort by document ID. The implementation keeps document-level provenance for citation lookup. It does not chunk documents or construct a generated answer. Read returned text as untrusted content if integrating it into a larger LLM application.
 
-[المرجع التقني الإنجليزي الكامل](README.en.md) يحفظ تفاصيل النسخة الأصلية. تُترك أسماء الملفات والأوامر ومعرّفات النماذج والمقاييس بصيغتها التقنية لضمان تطابقها مع الكود.
+Abstention thresholds maximize validation decision correctness. Ties choose the larger threshold. Thresholds are method-specific and cannot be compared as calibrated probabilities.
+
+---
+
+## Visualizations
+
+| First-result recall | Reciprocal rank |
+| :---: | :---: |
+| ![Recall at one](figures/retrieval-quality.svg) | ![MRR](figures/reciprocal-rank.svg) |
+
+---
+
+## Error Analysis
+
+All three methods misranked the query **“detect adversarial instruction text before sending to language model”**, returning the GAN image project first. Similar adversarial terminology in a different domain is a concrete lexical-retrieval failure. Adding an embedding retriever or reranker is a hypothesis to test, not a fix demonstrated here.
+
+The overlap baseline additionally confused top-one versus top-two expert projects and depth sharing versus cache head sharing. One correct top-ranked result was rejected by its calibrated threshold. query-results.json preserves every accepted/rejected decision, score, expected ID, and top-three ranking.
+
+Eight tests check the three methods' known matches, empty/unknown queries, duplicate document IDs, tokenization, ranking metrics, and deterministic ties. All passed.
+
+## Repository Structure
+
+* core.js — reusable lexical index and ranking metrics.
+* study.js — validation calibration and fixed test evaluation.
+* test.js — eight tests.
+* corpus.json — actual source snapshots with provenance.
+* queries.json — query splits and relevance labels.
+* metrics.json — aggregate comparisons.
+* query-results.json — all 84 per-method test decisions.
+* figures/, audit.json, repository.json, USAGE.md — charts, evidence, metadata, and usage.
+
+## Sources
+
+* corpus.json links each original public repository and records its source blob SHA.
+* [Lucene BM25 implementation](https://github.com/apache/lucene/blob/main/lucene/core/src/java/org/apache/lucene/search/similarities/BM25Similarity.java).
+
+The source snapshots remain attributed to their original repositories. The retrieval engine is an independent reference implementation.
